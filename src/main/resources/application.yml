@@ -1,0 +1,47 @@
+# local environment configurations
+## servlet configuration
+server:
+  servlet:
+    context-path: /sk-solutions
+  port: 8081
+
+## application configuration
+spring:
+  application:
+    name: sk-solutions-payments
+  datasource:
+    # driver-class-name: org.h2.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # url: jdbc:h2:mem:paymentdb?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/paymentdb?createDatabaseIfNotExist=true
+    username: root
+    password: password
+  # h2:
+  #   console:
+  #     enabled: true
+  jpa:
+    # database-platform: org.hibernate.dialect.H2Dialect
+    atabase-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  ## should be changed based on the environment
+  # profiles:
+  #   active: prod
+
+# cors configuration
+accessControl:
+  allowedOrigin: ${ALLOWED_ORIGIN:*}
+  allowedMethods: ${ALLOWED_METHODS:GET, POST, PUT, PATCH, DELETE, OPTIONS}
+  maxAge: ${MAX_AGE:3600}
+  allowedHeaders: ${ALLOWED_HEADERS:*}
+
+## sandbox payment configurations
+payment:
+  ipg:
+    token: eyJhbGciOiJIUzUxMiJ9.eyJtaWQiOiIwMDAwMDE3MyJ9.O4HEoHZs3GLrCdlBVSgW_Lkvp6ESzOhXemIVnvQCZvnQBGA2WnOnUyQ4hVyLSkQZHY3cxHK-3EkOodGg01kzWg
+    secret: l8O89pRuYvvHVKJqplnL#
+    schemes: Visa,MasterCard,iPay,LankaQR
+    redirect-uri:
+      return: http://localhost:3000/return?orderId=
+      cancel: http://localhost:3000/cancel?orderId=
