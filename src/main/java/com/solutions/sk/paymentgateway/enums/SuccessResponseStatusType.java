@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum SuccessResponseStatusType {
 
     CREATE_ORDER(200, "Successfully created the order"),
+    INITIATE_PAYMENT(200, "Successfully initiated the payment"),
     CAPTURE_PAYMENT(200, "Successfully captured the payment");
 
     private final int code;

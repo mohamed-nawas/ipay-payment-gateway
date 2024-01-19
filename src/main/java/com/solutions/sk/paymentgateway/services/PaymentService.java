@@ -12,10 +12,26 @@ import com.solutions.sk.paymentgateway.repositories.PaymentRepository;
 public class PaymentService {
 
     private final PaymentRepository repository;
+    private final IPGGatewayService gatewayService;
 
     @Autowired
-    public PaymentService(PaymentRepository paymentRepository) {
+    public PaymentService(PaymentRepository paymentRepository, IPGGatewayService ipgGatewayService) {
         this.repository = paymentRepository;
+        this.gatewayService = ipgGatewayService;
+    }
+
+    /**
+     * This method is used to initiate a payment for an order
+     * 
+     * @param orderId          order id
+     * @param orderDescription order description
+     */
+    public void initiatePayment(String orderId, String orderDescription) {
+        try {
+            gatewayService.checkOut(orderId, orderDescription);
+        } catch (Exception e) {
+            throw new SkSolutionsException("Error occurred when initiating the payment for orderId: " + orderId);
+        }
     }
 
     /**

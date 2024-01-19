@@ -39,6 +39,7 @@ accessControl:
 ## sandbox payment configurations
 payment:
   ipg:
+    url: https://sandbox.ipay.lk/ipg/checkout
     token: eyJhbGciOiJIUzUxMiJ9.eyJtaWQiOiIwMDAwMDE3MyJ9.O4HEoHZs3GLrCdlBVSgW_Lkvp6ESzOhXemIVnvQCZvnQBGA2WnOnUyQ4hVyLSkQZHY3cxHK-3EkOodGg01kzWg
     secret: l8O89pRuYvvHVKJqplnL#
     schemes: Visa,MasterCard,iPay,LankaQR

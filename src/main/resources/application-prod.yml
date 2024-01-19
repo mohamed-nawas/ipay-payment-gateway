@@ -30,6 +30,7 @@ accessControl:
 ## ipay payment configurations
 payment:
   ipg:
+    url: https://ipay.lk/ipg/checkout
     token: eyJhbGciOiJIUzUxMiJ9.eyJtaWQiOiIwMDA1MzI3MCJ9.4Jg6sXFF7z2UJmv19fqJrlqflqQwNjQYvY8vYGEg2Xd-MoSu0TFN6KzlAdthVQZ-eVmpvcK8UZ3xbQ_Id86wIQ
     secret: C29ZeekkNK89dfsuzXgu#
     schemes: Visa,MasterCard,iPay,LankaQR

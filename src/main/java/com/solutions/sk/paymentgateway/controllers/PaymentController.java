@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.solutions.sk.paymentgateway.dtos.request.PaymentInitiationRequestDto;
 import com.solutions.sk.paymentgateway.dtos.request.PaymentNotificationRequestDto;
 import com.solutions.sk.paymentgateway.dtos.response.PaymentResponseDto;
+import com.solutions.sk.paymentgateway.entities.OrderDetails;
 import com.solutions.sk.paymentgateway.entities.PaymentDetails;
 import com.solutions.sk.paymentgateway.enums.ErrorResponseStatusType;
 import com.solutions.sk.paymentgateway.enums.SuccessResponseStatusType;
@@ -36,6 +38,24 @@ public class PaymentController extends Controller {
     public PaymentController(PaymentService paymentService, OrderService orderService) {
         this.service = paymentService;
         this.orderService = orderService;
+    }
+
+    @PostMapping(path = "/init", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseWrapper> initiatePayment(@RequestBody PaymentInitiationRequestDto requestDto) {
+        try {
+            if (!requestDto.isRequiredAvailable())
+                return getBadRequestResponse(ErrorResponseStatusType.MISSING_REQUIRED_FIELDS);
+
+            OrderDetails order = orderService.getOrder(requestDto.getOrderId());
+            service.initiatePayment(order.getId(), order.getOrderDescription());
+            ;
+
+            log.debug("Successfully initiated the payment for orderId: {}", requestDto.getOrderId());
+            return getSuccessResponse(SuccessResponseStatusType.INITIATE_PAYMENT, null);
+        } catch (SkSolutionsException e) {
+            log.error("Error occurred during initiating the payment: {}", e);
+            return getInternalServerErrorResponse();
+        }
     }
 
     @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
