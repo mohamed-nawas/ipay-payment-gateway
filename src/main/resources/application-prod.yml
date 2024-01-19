@@ -11,9 +11,9 @@ spring:
     name: sk-solutions-payments
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/paymentdb?createDatabaseIfNotExist=true
-    username: sksolutionstest
-    password: vq9myYHAqYuOusL
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/paymentdb?createDatabaseIfNotExist=true
+    username: ${MYSQL_USER:sksolutionstest}
+    password: ${MYSQL_PWD:vq9myYHAqYuOusL}
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
