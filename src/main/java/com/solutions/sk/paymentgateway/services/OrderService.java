@@ -1,5 +1,7 @@
 package com.solutions.sk.paymentgateway.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -57,6 +59,14 @@ public class OrderService {
             throw new SkSolutionsException("Order with id: " + orderId + " not found in DB", e);
         } catch (DataAccessException e) {
             throw new SkSolutionsException("Error occurred when getting order from DB", e);
+        }
+    }
+
+    public List<OrderDetails> getOrders() {
+        try {
+            return repository.findAll();
+        } catch (DataAccessException e) {
+            throw new SkSolutionsException("Error getting orders from DB", e);
         }
     }
 }

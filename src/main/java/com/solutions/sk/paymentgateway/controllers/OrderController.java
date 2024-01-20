@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solutions.sk.paymentgateway.dtos.request.CreateOrderRequestDto;
+import com.solutions.sk.paymentgateway.dtos.response.OrderListResponseDto;
 import com.solutions.sk.paymentgateway.dtos.response.OrderResponseDto;
 import com.solutions.sk.paymentgateway.entities.OrderDetails;
 import com.solutions.sk.paymentgateway.enums.ErrorResponseStatusType;
@@ -59,6 +61,20 @@ public class OrderController extends Controller {
             return getSuccessResponse(SuccessResponseStatusType.CREATE_ORDER, responseDto);
         } catch (SkSolutionsException e) {
             log.error("Error occurred during creating the order: {}", e);
+            return getInternalServerErrorResponse();
+        }
+    }
+
+    @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseWrapper> getOrders() {
+        try {
+            var orders = service.getOrders();
+            OrderListResponseDto responseDto = new OrderListResponseDto(orders);
+
+            log.debug("Successfully returned all the orders, {}", responseDto.toLogJson());
+            return getSuccessResponse(SuccessResponseStatusType.GET_ORDERS, responseDto);
+        } catch (SkSolutionsException e) {
+            log.error("Error occurred while getting all orders, {}", e);
             return getInternalServerErrorResponse();
         }
     }

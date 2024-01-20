@@ -15,7 +15,7 @@ spring:
     username: ${MYSQL_USER:sksolutionstest}
     password: ${MYSQL_PWD:vq9myYHAqYuOusL}
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    # database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
     show-sql: true
