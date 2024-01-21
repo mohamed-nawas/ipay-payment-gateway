@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,13 +70,27 @@ public class OrderController extends Controller {
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseWrapper> getOrders() {
         try {
-            var orders = service.getOrders();
+            var orderDetails = service.getOrders();
+            var orders = orderDetails.stream().map(order -> new OrderResponseDto(order, token, returnUri, cancelUri)).toList();
             OrderListResponseDto responseDto = new OrderListResponseDto(orders);
 
             log.debug("Successfully returned all the orders, {}", responseDto.toLogJson());
             return getSuccessResponse(SuccessResponseStatusType.GET_ORDERS, responseDto);
         } catch (SkSolutionsException e) {
             log.error("Error occurred while getting all orders, {}", e);
+            return getInternalServerErrorResponse();
+        }
+    }
+
+    @DeleteMapping(path = "/{orderId}", produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<ResponseWrapper> deleteOrderByOrderId(@PathVariable(name = "orderId") String orderId) {
+        try {
+            service.deleteOrder(orderId);
+
+            log.debug("Successfully deleted the order with orderId: , {}", orderId);
+            return getSuccessResponse(SuccessResponseStatusType.DELETE_ORDER, null);
+        } catch (SkSolutionsException e) {
+            log.error("Error occurred while deleting order, orderId: {}", orderId, e);
             return getInternalServerErrorResponse();
         }
     }

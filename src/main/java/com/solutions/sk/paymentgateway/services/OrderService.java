@@ -69,4 +69,13 @@ public class OrderService {
             throw new SkSolutionsException("Error getting orders from DB", e);
         }
     }
+
+    public void deleteOrder(String orderId) {
+        try {
+            var orderDetail = getOrder(orderId);
+            repository.delete(orderDetail);
+        } catch (DataAccessException e) {
+            throw new SkSolutionsException("Error deleting order with orderId: " + orderId + " from DB", e);
+        }
+    }
 }
